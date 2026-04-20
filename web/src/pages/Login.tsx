@@ -14,7 +14,7 @@ export function Login() {
   const { language } = useUiStore()
 
   const [email, setEmail] = useState('admin@optimusguard.com')
-  const [password, setPassword] = useState('password')
+  const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
   const [showPw, setShowPw] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -29,14 +29,11 @@ export function Login() {
       setAuth(res.data.token, res.data.user, remember)
       navigate('/')
     } catch (err: unknown) {
-      // For demo: allow any credentials when API is not available
       const axiosErr = err as { response?: { status?: number } }
       if (axiosErr?.response?.status === 401) {
         setError(t(language, 'invalidCredentials'))
       } else {
-        // fallback demo login
-        setAuth('demo-token', { id: '1', name: 'Admin', email, role: 'admin' }, remember)
-        navigate('/')
+        setError(t(language, 'errorFetch'))
       }
     } finally {
       setLoading(false)

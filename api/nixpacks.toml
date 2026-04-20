@@ -1,5 +1,5 @@
-[phases.build]
-cmds = ["npm ci --omit=dev"]
+[phases.install]
+cmds = ["npm install --omit=dev --prefer-offline"]
 
 [start]
 cmd = "node src/server.js"

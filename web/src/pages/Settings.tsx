@@ -22,7 +22,7 @@ export function Settings() {
   const [savingProfile, setSavingProfile] = useState(false)
 
   // API config form
-  const [apiUrl, setApiUrl] = useState((import.meta as unknown as { env: Record<string, string> }).env.VITE_API_URL ?? 'http://localhost:8000/api')
+  const [apiUrl, setApiUrl] = useState((import.meta as unknown as { env: Record<string, string> }).env.VITE_API_URL ?? 'https://api.optimusguard.jaaziel.co.mz/api')
   const [syncInterval, setSyncInterval] = useState('1')
   const [savingApi, setSavingApi] = useState(false)
 

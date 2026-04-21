@@ -47,6 +47,30 @@ router.get('/', auth, async (req, res) => {
   }
 })
 
+// POST /api/messages — público, apps móveis reportam mensagens bloqueadas
+router.post('/', async (req, res) => {
+  try {
+    const { deviceId, sender, patternText, severity, platform, appVersion, rawContent } = req.body
+    if (!deviceId || !sender || !patternText) {
+      return res.status(400).json({ message: 'deviceId, sender and patternText are required' })
+    }
+    const msg = await BlockedMessage.create({
+      deviceId,
+      sender,
+      patternText,
+      severity: severity || 'medium',
+      platform: platform || 'unknown',
+      appVersion: appVersion || '1.0',
+      rawContent: rawContent || '',
+      blockedAt: new Date(),
+    })
+    res.status(201).json({ id: msg._id, message: 'Reported' })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 // GET /api/messages/:id
 router.get('/:id', auth, async (req, res) => {
   try {

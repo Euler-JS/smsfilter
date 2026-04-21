@@ -10,8 +10,8 @@ const validatePattern = [
   body('severity').isIn(['low', 'medium', 'high']).withMessage('Invalid severity'),
 ]
 
-// GET /api/patterns
-router.get('/', auth, async (req, res) => {
+// GET /api/patterns — public (apps móveis sincronizam sem autenticação)
+router.get('/', async (req, res) => {
   try {
     const {
       page = 1, pageSize = 20,

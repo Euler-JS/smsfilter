@@ -71,6 +71,31 @@ router.post('/', async (req, res) => {
   }
 })
 
+// GET /api/messages/spam — público, dispositivos baixam mensagens confirmadas para treino local
+router.get('/spam', async (req, res) => {
+  try {
+    const { since, limit = 500 } = req.query
+
+    const filter = { rawContent: { $exists: true, $ne: '' } }
+    if (since) filter.blockedAt = { $gte: new Date(since) }
+
+    const messages = await BlockedMessage.find(filter)
+      .select('rawContent severity platform blockedAt -_id')
+      .sort({ blockedAt: -1 })
+      .limit(parseInt(limit))
+      .lean()
+
+    res.json({
+      data: messages,
+      total: messages.length,
+      generatedAt: new Date().toISOString(),
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 // GET /api/messages/:id
 router.get('/:id', auth, async (req, res) => {
   try {
